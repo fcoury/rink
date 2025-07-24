@@ -32,9 +32,7 @@ impl App {
     }
 
     pub fn run(&mut self) -> anyhow::Result<()> {
-        // self.terminal.clear()?;
-        // self.terminal.set_cursor_visible(false)?;
-        // self.terminal.set_title("My Terminal App")?;
+        self.terminal.prepare()?;
 
         loop {
             if self.should_quit {
@@ -62,6 +60,7 @@ impl App {
             self.current_buffer = next_buffer;
         }
 
+        self.terminal.cleanup()?;
         Ok(())
     }
 

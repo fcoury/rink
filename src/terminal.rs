@@ -1,6 +1,10 @@
 use std::io;
 
-use crossterm::{cursor, execute, style::Print};
+use crossterm::{
+    cursor, execute,
+    style::Print,
+    terminal::{self, EnterAlternateScreen, LeaveAlternateScreen},
+};
 
 pub struct Terminal {
     width: u16,
@@ -10,6 +14,21 @@ pub struct Terminal {
 impl Terminal {
     pub fn new(width: u16, height: u16) -> Self {
         Terminal { width, height }
+    }
+
+    pub fn prepare(&self) -> anyhow::Result<()> {
+        terminal::enable_raw_mode()?;
+        execute!(io::stdout(), EnterAlternateScreen)?;
+        execute!(io::stdout(), cursor::Hide)?;
+
+        Ok(())
+    }
+
+    pub fn cleanup(&self) -> anyhow::Result<()> {
+        execute!(io::stdout(), cursor::Show)?;
+        execute!(io::stdout(), LeaveAlternateScreen)?;
+        terminal::disable_raw_mode()?;
+        Ok(())
     }
 
     pub fn write_at(&self, x: u16, y: u16, text: &str) -> anyhow::Result<()> {

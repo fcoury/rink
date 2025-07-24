@@ -19,7 +19,7 @@ impl Component for CounterApp {
                 Element {
                     x: 5,
                     y: 4,
-                    width: 30,
+                    width: 60,
                     height: 1,
                     content: "Press 'j' to increment, 'k' to decrement, 'q' to quit".to_string(),
                     style: Style {
